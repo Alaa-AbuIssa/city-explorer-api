@@ -38,6 +38,7 @@ server.get('/weather',(req,res)=>{
     })
     // res.send(cityData)
     // console.log(weather);
+    
 
 
     try {
