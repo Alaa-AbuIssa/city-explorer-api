@@ -1,63 +1,63 @@
-'use strict';
+'use strric';
 
 const express = require('express');
-const weather = require('./assets/weather.json');
-const cors = require ('cors');
 require('dotenv').config();
-
+const cors = require('cors');
 const server = express();
+const weather =require('./assets/weather.json');
+// const PORT = 3001;
+const PORT = process.env.PORT ;
 server.use(cors());
 
-const PORT = process.env.PORT;
 
 
-
-server.listen(PORT,()=>{
-    console.log(`Listing for request!! from your ${process.env.PORT} PORT`);
+server.listen(PORT,() => {
+  
+  console.log( `Listening on PORT ${PORT}`); 
+  
 })
 
 
-class ForeCast {
-    constructor(object) {
-        this.date = object.valid_date; 
-        this.description = `Low of ${object.low_temp}, high of ${object.max_temp} with ${object.weather.description}`;
-    }
-}
-
-
-// http://localhost:3001/weather?lat= 47.60621&lon=-122.33207&searchQuery=Seattle
-server.get('/weather',(req,res)=>{
-    // console.log(req.query);
-
-    let cityData = weather.find(item=>{
-        if(item.city_name.toLocaleLowerCase()==req.query.searchQuery.toLocaleLowerCase() && item.lat==req.query.lat && item.lon==req.query.lon){
+      class ForeCast {
+        
+        constructor(object){
+          
             
-            return item
+          
+             this.description=`Low of : ${object.low_temp} and a high of ${object.max_temp} with a ${object.weather.description} `
+             this.date= object.valid_date;
+            
+        
+          }
         }
         
-    })
-    // res.send(cityData)
-    // console.log(weather);
-    
+server.get('/weather',(req,res)=>{
+  let searchQuery = req.query.cityname;
 
+  let city = weather.find(item=>{
+    if (searchQuery.toLocaleLowerCase() == item.city_name.toLocaleLowerCase() ){
 
-    try {
-
-        let forecasts = cityData.data.map(item => {
-            return new ForeCast(item);
-        })
-        // console.log(forecasts);
+      return item;
+    }
+  });
+  
+      try {
+        
+        let forecasts = city.data.map(item => {
+          
+          return new ForeCast(item);
+        });
         res.send(forecasts);
-    } 
-    catch {
-        res.status(404).send('Sorry! there is no city with your informations');
-    };
+      } 
+      
+      catch {
+        res.status(404).send('OPS!! Your City Not Found');
+      }
+      
 })
 
 
-server.get('*',(req,res)=>{
-    res.status(500).send('Sorry! Your Page Not Found')
+
+server.get('*', (req, res) => {
+  res.status(500).send(  '"error": "Something went wrong."');
 })
-
-
-
