@@ -13,6 +13,7 @@ const PORT = process.env.PORT;
 
 
 
+
 server.listen(PORT, () => {
   console.log(`Server Listining on PORT ${PORT}`);
 })
@@ -97,10 +98,10 @@ function moviesHandler(req, res) {
 
 
 
+
 server.get('*', (req, res) => {
     res.send('Error: Something went wrong.');
 })
-
 
 
 
