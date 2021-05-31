@@ -4,7 +4,7 @@ const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
 const server = express();
-const weather =require('./assets/weather.json');
+// const weather =require('./assets/weather.json');
 // const PORT = 3001;
 server.use(cors());
 
