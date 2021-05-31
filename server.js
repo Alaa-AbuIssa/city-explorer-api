@@ -8,6 +8,8 @@ const server = express();
 // const PORT = 3001;
 server.use(cors());
 
+require('./weather');
+ require('./movie');
 
 const PORT = process.env.PORT;
 // const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
