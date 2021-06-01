@@ -1,63 +1,34 @@
-'use strric';
+'use strict'
 
 const express = require('express');
-require('dotenv').config();
 const cors = require('cors');
+require('dotenv').config();
+const axios = require('axios');
 const server = express();
-const weather =require('./assets/weather.json');
-// const PORT = 3001;
-const PORT = process.env.PORT ;
-server.use(cors());
+server.use(cors());    //make server opened for anyone
+const PORT = process.env.PORT;
 
-
-
-server.listen(PORT,() => {
-  
-  console.log( `Listening on PORT ${PORT}`); 
-  
+server.listen(PORT, () => {
+    console.log('Server Listining');
 })
 
 
-      class ForeCast {
-        
-        constructor(object){
-          
-            
-          
-             this.description=`Low of : ${object.low_temp} and a high of ${object.max_temp} with a ${object.weather.description} `
-             this.date= object.valid_date;
-            
-        
-          }
-        }
-        
-server.get('/weather',(req,res)=>{
-  let searchQuery = req.query.cityname;
 
-  let city = weather.find(item=>{
-    if (searchQuery.toLocaleLowerCase() == item.city_name.toLocaleLowerCase() ){
+// http://localhost:3001/test
+// server.get('/test', (req, res) => {
+//     res.status(200).send('hello from back end');
+// })
 
-      return item;
-    }
-  });
-  
-      try {
-        
-        let forecasts = city.data.map(item => {
-          
-          return new ForeCast(item);
-        });
-        res.send(forecasts);
-      } 
-      
-      catch {
-        res.status(404).send('OPS!! Your City Not Found');
-      }
-      
-})
 
+const weatherHandler = require('./modules/weather')
+server.get('/weather', weatherHandler)
+
+
+
+const moviesHandler = require('./modules/movies')
+server.get('/movies', moviesHandler)
 
 
 server.get('*', (req, res) => {
-  res.status(500).send(  '"error": "Something went wrong."');
+    res.send('Error: Something went wrong.');
 })
